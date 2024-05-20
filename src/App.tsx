@@ -40,7 +40,7 @@ function App() {
       setCharacterMorte(response.data.died);
       setCharacterTitulos(response.data.titles);
       setCharacterAliases(response.data.aliases);
-      setCharacterAliancas(response.data.allegiance);
+      setCharacterAliancas(response.data.allegiances);
     } catch (error) {
       console.error("Erro ao buscar o personagem:", error);
     }

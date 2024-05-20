@@ -1,3 +1,6 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+
 export type Personagem = {
   nome: string;
   titulos: string[] | undefined;
@@ -28,11 +31,42 @@ const CartaoPersonagem = ({
   morte;
   apelidos;
 
+  const [casaPesquisada, setCasaPesquisada] = useState<string>("");
+
+  const fetchNomeCasa = async (uri: string): Promise<string[] | undefined> => {
+    try {
+      const response = await axios.get(uri);
+
+      setCasaPesquisada(response.data.name);
+      return response.data.name;
+    } catch (error) {
+      console.error("Erro ao buscar o personagem:", error);
+    }
+  };
+
+  const getHouses = async () => {
+    aliancas?.map(async (alianca) => {
+      const resInterno = await fetchNomeCasa(alianca);
+
+      return resInterno;
+    });
+  };
+
+  useEffect(() => {
+    getHouses();
+  }, [aliancas]);
+
   return (
     <div className="cartao-personagem_container items-center flex border-2 border-solid rounded-lg border-slate-900 p-8 m-2 gap-8 w-screen justify-center">
       <div className="cartao-personagem_dados m-2 w-2/5 border-2 border-solid rounded-lg border-slate-900 p-4">
         <div className="cartao-personagem_nome_titulo text-lg font-bold">
-          Nome:{" "}
+          <div className="cartao-personagem_nome_titulo text-lg font-bold">
+            Casa:{" "}
+            <div className="cartao-personagem_nome_valor text-sm font-normal">
+              {casaPesquisada ? casaPesquisada : "Não Disponível"}
+            </div>
+          </div>
+          Nome:
           <div className="cartao-personagem_nome_valor text-sm font-normal">
             {nome ? nome : "Não Disponível"}
           </div>
@@ -65,8 +99,11 @@ const CartaoPersonagem = ({
         <div className="cartao-personagem_genero_titulo text-lg font-bold">
           Gênero:{" "}
           <div className="cartao-personagem_genero_valor text-sm font-normal">
-          {genero === "Male" ? "Masculino" : genero === "Female" ? "Feminino" : "Não Disponível"}
-
+            {genero === "Male"
+              ? "Masculino"
+              : genero === "Female"
+              ? "Feminino"
+              : "Não Disponível"}
           </div>
         </div>
 
@@ -105,20 +142,6 @@ const CartaoPersonagem = ({
           </div>
         )}
 
-        {aliancas && aliancas.length > 0 &&(
-          <div className="cartao-personagem_alianca_titulo text-lg font-bold">
-            Aliança:{" "}
-            <div className="cartao-personagem_alianca_valor text-sm font-normal">
-              {aliancas?.map((alianca, index) => (
-                <ol key={index}>
-                  <li key={index}>
-                    {index + 1} - {alianca}
-                  </li>
-                </ol>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
