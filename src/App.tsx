@@ -21,7 +21,7 @@ function App() {
   };
 
   const handleClick = () => {
-    if(valorDigitado >= 2135){
+    if(valorDigitado >= 2135 || valorDigitado < 1 ){
       alert('Por favor, digite um número entre 1 e 2134')
     }
     setValorPesquisado(valorDigitado);
@@ -32,7 +32,6 @@ function App() {
         `https://anapioficeandfire.com/api/characters/${id}`
       );
 
-      console.log(response.data);
       setCharacterName(response.data.name);
       setCharacterCultura(response.data.culture);
       setCharacterGenero(response.data.gender);
